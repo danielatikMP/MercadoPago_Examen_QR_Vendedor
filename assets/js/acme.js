@@ -48,8 +48,11 @@ $(document).ready(function() {
 
 
 		  case "Mercado Pago": // Método de pago de Mercado Pago
+		  	
 		  	var store_id = $('#store_id').val(); // Obtención de store_id de la página
 		  	var external_id = $('#external_id').val();// obtención de external id del POS de la página
+		  	var external_store_id = $('#externalStoreID').val();// obtención de external id del POS de la página
+		  	
 		  	var external_reference = $('#external_reference').val(); // obtención del external_id de la página
 		  	modal.find(".modal-body").html("<center><div id='qr'></div><div id='countDown'></div><br/><div id='loading'></div><br/><div id='orderStatus'></div><div id='orderResponse'></div></center>");
 		    modal.find(".btn-primary").text("Cancel");
@@ -71,17 +74,20 @@ $(document).ready(function() {
 					$('#qr').html("<img with='350px' height='350px' src='"+data.results[0].qr.image+"'>");
 					
 					// REVISA AQUÍ:
-					// Agrega la URL notification_url 
+					// Agrega la URL notification_url y modifica los campos que creas necesarios 
 					// para recibir las notificaciones en tu endpoint público.
 
 					var orderJSON ={"external_reference": external_reference,
 									"notification_url": "",
+									"total_amount":XXX,
+									"title":"Compra en ACME SA",
+									"description":"Productos",
 									"items" : items
 									};
 
 					// Crea orden en base al external_id de la página
 
-					$.post("api/order/create/",{"external_id":external_id,"json":JSON.stringify(orderJSON)},function(data){
+					$.post("api/order/create/",{"external_id":external_id,"external_store_id":external_store_id,"json":JSON.stringify(orderJSON)},function(data){
 
 						console.log("Crea orden:");
 						console.log(data);
@@ -380,28 +386,31 @@ $(document).ready(function() {
 // Haz los cambios necesarios en las cantidades y/o precio unitario para lograrlo
 
 var items = [{
-			"id":"sku021",
+			"sku_number":"sku021",
 		    "title" : "Caffè Americano",
-		    "picture_url":"https://globalassets.starbucks.com/assets/f12bc8af498d45ed92c5d6f1dac64062.jpg?impolicy=1by1_wide_1242",
 		    "description" : "Espresso shots topped with hot water create a light layer of crema culminating in this wonderfully rich cup with depth and nuance. Pro Tip: For an additional boost, ask your barista to try this with an extra shot.",
 		    "unit_price" : 90,
-		    "quantity" : 1
+		    "unit_measure": "unit",
+		    "quantity" : 1,
+		    "total_amount": 90
 		  },
 		  {
-		  	"id":"sku011",
+		  	"sku_number":"sku011",
 		    "title" : "Caffè Misto",
-		    "picture_url":"https://globalassets.starbucks.com/assets/d668acbc691b47249548a3eeac449916.jpg?impolicy=1by1_wide_1242",
 		    "description" : "A one-to-one combination of fresh-brewed coffee and steamed milk add up to one distinctly delicious coffee drink remarkably mixed.",
 		    "unit_price" : 105,
-		    "quantity" : 1
+		    "unit_measure": "unit",
+		    "quantity" : 1,
+		    "total_amount": 105
 		  },
 		  {
-		  	"id":"sku097",
+		  	"sku_number":"sku097",
 		    "title" : "Iced Lemon Loaf Cake",
-		    "picture_url":"https://globalassets.starbucks.com/assets/c636153c255049a487da5db5b9d5f631.jpg?impolicy=1by1_wide_1242",
 		    "description" : "This citrusy, buttery, moist lemon pound cake topped with a sweet icing creates an amazingly refreshing cake like never before.",
 		    "unit_price" : 125,
-		    "quantity" : 3
+		    "unit_measure": "unit",
+		    "quantity" : 3,
+		    "total_amount": 375
 		  }];
 
 
